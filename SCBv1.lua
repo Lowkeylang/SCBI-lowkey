@@ -378,7 +378,7 @@ function cooldown()
 end
 
 function Population()
-    if SF22 == on then
+    if SF2 == on then
         gg.clearList()
         gg.clearResults()
         if
