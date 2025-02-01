@@ -8,24 +8,24 @@ if date >= Date then
 end
 --------PASSWORD--------
 
-gg.alert("--- Lowkey ---\n\nSimCity h@ck")
+-- gg.alert("--- Lowkey ---\n\nSimCity h@ck")
 
-local Passwords = {"qweqwe"}
-local Menu = gg.prompt({"Password : "}, nil, {"text"})
-if not Menu then
-    return
-end
-for l, I in pairs(Passwords) do
-    if Menu[1] == I then
-        A = true
-    end
-end
-if A ~= true then
-    gg.alert("❌ Wrong Password ❌")
-    return
-else
-    gg.alert("✅ Correct Password ✅")
-end
+-- local Passwords = {"qweqwe"}
+-- local Menu = gg.prompt({"Password : "}, nil, {"text"})
+-- if not Menu then
+--     return
+-- end
+-- for l, I in pairs(Passwords) do
+--     if Menu[1] == I then
+--         A = true
+--     end
+-- end
+-- if A ~= true then
+--     gg.alert("❌ Wrong Password ❌")
+--     return
+-- else
+--     gg.alert("✅ Correct Password ✅")
+-- end
 
 
 
@@ -312,7 +312,7 @@ function Bulldoze()
 end
 
 function cooldown()
-    if SF4 == on then
+    if SF1 == on then
          --------FUNCTION PROCESS HERE--------
          gg.clearResults()
 
