@@ -134,7 +134,7 @@ gg.toast("Open Game Guardian")
                 cooldown()
             end
             -- --------------
-            if MenuSF == 21 then
+            if MenuSF == 2 then
                 if SF2 == on then
                     SF2 = off
                 else
