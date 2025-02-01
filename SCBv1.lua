@@ -118,6 +118,7 @@ gg.toast("Open Game Guardian")
                 {
 
                     SF1 .. " NO CD Nano Tech",
+                    SF2 .. " Population Surge",
                     " Back"
                 },
                 nil,
@@ -132,7 +133,17 @@ gg.toast("Open Game Guardian")
                 end
                 cooldown()
             end
-            if MenuSF == 2 then
+            -- --------------
+            if MenuSF == 21 then
+                if SF2 == on then
+                    SF2 = off
+                else
+                    SF2 = on
+                end
+                Population()
+            end
+            -- -----------------
+            if MenuSF == 3 then
                 MainMenu()
             end
             M = -1
@@ -367,7 +378,7 @@ function cooldown()
 end
 
 function Population()
-    if SF3 == on then
+    if SF22 == on then
         gg.clearList()
         gg.clearResults()
         if
