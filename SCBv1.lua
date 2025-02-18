@@ -7,7 +7,18 @@ if date >= Date then
     return
 end
 --------PASSWORD--------
+---------------url --------
+function download_script(url)
+    local http = gg.makeRequest(url)
+    if http and http.content then
+        return load(http.content) -- Execute the downloaded script
+    else
+        gg.alert("Failed to load script from: " .. url)
+        return nil
+    end
+end
 
+---------------end url --------
 -- gg.alert("--- Lowkey ---\n\nSimCity h@ck")
 
 -- local Passwords = {"qweqwe"}
@@ -44,6 +55,7 @@ MU7 = off
 MU8 = off
 MU9 = off
 MU10 = off
+local script1 = download_script("https://raw.githubusercontent.com/Lowkeylang/SCBI-lowkey/refs/heads/main/SCBI_lowkey_GG_search_code_generator.lua")
 function MainMenu()
     while true do
         if gg.isVisible(true) then
@@ -119,6 +131,7 @@ gg.toast("Open Game Guardian")
 
                     SF1 .. " NO CD Nano Tech",
                     SF2 .. " Population Surge",
+                    SF3 .. " GG Value Generater",
                     " Back"
                 },
                 nil,
@@ -142,8 +155,17 @@ gg.toast("Open Game Guardian")
                 end
                 Population()
             end
-            -- -----------------
+             -- --------------
             if MenuSF == 3 then
+                if SF3 == on then
+                    SF3 = off
+                else
+                    SF3 = on
+                end
+                script1()
+            end
+            -- -----------------
+            if MenuSF == 4 then
                 MainMenu()
             end
             M = -1
@@ -474,6 +496,8 @@ end
 function LA()
   gg.toast("wala pa diActive")
 end
+
+
 
 while true do
     if gg.isVisible(true) then
