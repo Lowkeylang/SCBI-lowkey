@@ -1,40 +1,37 @@
---// Grow a Garden Super Low Graphics Script
---// Optimized for Delta Executor
+--// Grow a Garden Ultra Low GFX (Truly Moveable UI)
 --// Made by: Lowkeysen
 
 local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
-local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
---// GUI
+-- GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LowGFX_UI"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = game.CoreGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 250, 0, 120)
-frame.Position = UDim2.new(0.5, -125, 0.5, -60)
+frame.Size = UDim2.new(0, 280, 0, 140)
+frame.Position = UDim2.new(0.5, -140, 0.5, -70)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
 frame.Parent = screenGui
 
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 30)
 title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-title.Text = "🌱 Grow a Garden | Low GFX"
+title.Text = "🌱 Grow a Garden | Ultra Low GFX"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextScaled = true
 title.Parent = frame
 
 local btn = Instance.new("TextButton")
-btn.Size = UDim2.new(0, 200, 0, 40)
-btn.Position = UDim2.new(0.5, -100, 0.5, -20)
+btn.Size = UDim2.new(0, 240, 0, 50)
+btn.Position = UDim2.new(0.5, -120, 0.5, -25)
 btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-btn.Text = "Enable Super Low Graphics"
+btn.Text = "Enable Ultra Low Graphics"
 btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 btn.TextScaled = true
 btn.Parent = frame
@@ -48,34 +45,87 @@ exitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 exitBtn.TextScaled = true
 exitBtn.Parent = frame
 
+--// Manual Drag System
+local dragging, dragInput, dragStart, startPos
+
+title.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+title.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+RunService.RenderStepped:Connect(function()
+	if dragging and dragInput then
+		local delta = dragInput.Position - dragStart
+		frame.Position = UDim2.new(
+			startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y
+		)
+	end
+end)
+
 --// Functions
-local function applyLowGFX()
-    -- Lighting
+local function applyUltraLowGFX()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 9e9
     Lighting.Brightness = 0
     Lighting.EnvironmentSpecularScale = 0
     Lighting.EnvironmentDiffuseScale = 0
     
-    -- Remove post effects
     for _, v in pairs(Lighting:GetChildren()) do
-        if v:IsA("PostEffect") then
-            v.Enabled = false
-        end
+        if v:IsA("PostEffect") then v.Enabled = false end
     end
 
-    -- Remove textures & decals
     for _, obj in pairs(workspace:GetDescendants()) do
         if obj:IsA("Decal") or obj:IsA("Texture") then
             obj:Destroy()
-        elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+        elseif obj:IsA("ParticleEmitter") or obj:IsA("Trail") 
+            or obj:IsA("Fire") or obj:IsA("Smoke") 
+            or obj:IsA("Sparkles") or obj:IsA("Explosion") 
+            or obj:IsA("Beam") then
             obj.Enabled = false
         elseif obj:IsA("MeshPart") then
             obj.TextureID = ""
+            obj.Material = Enum.Material.SmoothPlastic
+        elseif obj:IsA("Part") then
+            obj.Material = Enum.Material.SmoothPlastic
+        elseif obj:IsA("SurfaceAppearance") then
+            obj:Destroy()
         end
     end
     
-    -- Simplify terrain
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= Players.LocalPlayer then
+            local char = plr.Character
+            if char then
+                for _, anim in pairs(char:GetDescendants()) do
+                    if anim:IsA("Animator") or anim:IsA("AnimationController") then
+                        anim:Destroy()
+                    end
+                end
+            end
+        end
+    end
+
+    for _, obj in pairs(workspace:GetDescendants()) do
+        if obj:IsA("Animator") or obj:IsA("AnimationController") then
+            obj:Destroy()
+        end
+    end
+
     if workspace:FindFirstChildOfClass("Terrain") then
         workspace.Terrain.WaterWaveSize = 0
         workspace.Terrain.WaterWaveSpeed = 0
@@ -83,14 +133,13 @@ local function applyLowGFX()
         workspace.Terrain.WaterReflectance = 0
     end
 
-    -- Lower rendering (pixel look)
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
 end
 
--- Button connections
+-- Button actions
 btn.MouseButton1Click:Connect(function()
-    applyLowGFX()
-    btn.Text = "✅ Low Graphics Applied"
+    applyUltraLowGFX()
+    btn.Text = "✅ Ultra Low GFX Applied"
 end)
 
 exitBtn.MouseButton1Click:Connect(function()
